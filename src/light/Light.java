@@ -3,32 +3,26 @@ package light;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
 /**
- * The main for the program. Also has 2 views, input and light, within it.
+ * The main for the program.
+ * Also has 2 views, input and light, within it. 
+ * Acts as the controller for the program.
  */
 public class Light extends Application {
     final static int CANVAS_HEIGHT = 800;
     final static int CANVAS_WIDTH = 800;
-    private Canvas canvas;
-    
-    static GraphicsContext gc;
     
     @Override
     public void start(Stage primaryStage) {
@@ -45,6 +39,7 @@ public class Light extends Application {
      * Displays the view where users can input the variables of the program
      */
     private void showInput(Stage primaryStage, double ni, double nr, double aoi) {
+        // Set up grid
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -55,7 +50,7 @@ public class Light extends Application {
         primaryStage.show();
 
         
-
+        // Create and add gui components 
         Label n1Label = new Label("Index of refracion (medium 1): ");
         Label n2Label = new Label("Index of refraction (medium 2): ");
         Label aoiLabel = new Label("Angle of incidence: ");
@@ -89,9 +84,16 @@ public class Light extends Application {
      * Displays the view where the light moves through the mediums
      */
     private void showLight(Stage primaryStage, double ni, double nr, double aoi) {
+        // Set up view for the light
+        GraphicsContext gc;
         Group root = new Group();    
-        canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
         gc = canvas.getGraphicsContext2D();
+        
+        Button change = new Button("Change properties");
+        change.setOnAction((ActionEvent e) -> {
+            showInput(primaryStage, ni, nr, aoi);
+        });
         
         // Draw medium and border
         gc.setFill(Color.BLUE);
@@ -100,15 +102,11 @@ public class Light extends Application {
         gc.strokeLine(0, CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT);
                 
         
-        Calculator calc = new Calculator(ni, nr, aoi);
+        // Perform calculations and output to the view
+        Calculator calc = new Calculator(ni, nr, aoi, gc);
         calc.drawLight();
         
-        Button change = new Button("Change properties");
-        change.setOnAction((ActionEvent e) -> {
-            showInput(primaryStage, ni, nr, aoi);
-        });
-        
-        
+
         root.getChildren().add(canvas);  
         root.getChildren().add(change);
         primaryStage.setScene(new Scene(root));   
