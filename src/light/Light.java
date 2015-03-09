@@ -87,7 +87,7 @@ public class Light extends Application {
         // Set up view for the light
         GraphicsContext gc;
         Group root = new Group();    
-        Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT+100);
         gc = canvas.getGraphicsContext2D();
         
         Button change = new Button("Change properties");
@@ -100,6 +100,7 @@ public class Light extends Application {
         gc.fillRect(CANVAS_WIDTH/2, 0, Light.CANVAS_WIDTH, Light.CANVAS_HEIGHT);
         gc.setStroke(Color.BLACK);
         gc.strokeLine(0, CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT);
+        
                 
         
         // Perform calculations and output to the view

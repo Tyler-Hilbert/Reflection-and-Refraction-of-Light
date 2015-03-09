@@ -1,5 +1,6 @@
 package light;
 
+import java.text.DecimalFormat;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -36,6 +37,7 @@ public class Calculator {
         drawIncidenceLine();
         drawRefractionLine();
         drawNormalLine();
+        outputValues();
     }
     
     /**
@@ -65,6 +67,18 @@ public class Calculator {
         gc.strokeLine(getMX(), getContactY(), Light.CANVAS_WIDTH, endingY);
     }
     
+    /**
+     * Outputs the values to the view
+     */
+    private void outputValues() {
+        gc.setFill(Color.BLACK);
+        gc.fillText("Angle of incidence: " + angleOfIncidence, 15, Light.CANVAS_HEIGHT + 15);
+        DecimalFormat format = new DecimalFormat("###.###");
+        gc.fillText("Angle of refarction: " + format.format(getAngleOfRefraction()), 15, Light.CANVAS_HEIGHT + 30);
+        gc.fillText("Index of refraction (mediums 1): " + ni, 15, Light.CANVAS_HEIGHT + 45);
+        gc.fillText("Index of refraction (mediums 2): " + nr, 15, Light.CANVAS_HEIGHT + 60);
+        
+    }
     
     /** 
      * @return The y value of where the light meets between the 2 mediums
