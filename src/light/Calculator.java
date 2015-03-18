@@ -68,16 +68,51 @@ public class Calculator {
     }
     
     /**
+     * Draws the reflected line.
+     * This only happens when the angle of incidence is over the critical angle.
+     */
+    private void drawReflectedLine() {
+       gc.setStroke(Color.RED);
+            
+       // Creaete triangle and use pythagrom theroy to draw reflected line
+       double xr = Light.CANVAS_WIDTH; // Large number to make sure the reflected ray is long enough
+       // The ray is always going to be reflected at an equal angle as the incidence ray
+       double angleOfReflection = angleOfIncidence;
+       double yr = Math.tan(Math.toRadians(angleOfReflection)) * xr;
+       
+       // Move the triangle created to the create location
+       double xe = getMX() - xr;
+       double ye = getContactY() + yr;
+
+       gc.strokeLine(getMX(), getContactY(), xe, ye);
+    }
+    
+    /**
      * Outputs the values to the view
      */
     private void outputValues() {
         gc.setFill(Color.BLACK);
+        
         gc.fillText("Angle of incidence: " + angleOfIncidence, 15, Light.CANVAS_HEIGHT + 15);
+        
+        // Display angle of refraction or critical angle
         DecimalFormat format = new DecimalFormat("###.###");
-        gc.fillText("Angle of refarction: " + format.format(getAngleOfRefraction()), 15, Light.CANVAS_HEIGHT + 30);
+        if (!Double.isNaN(getAngleOfRefraction())) {
+            gc.fillText("Angle of refraction: " + format.format(getAngleOfRefraction()), 15, Light.CANVAS_HEIGHT + 30);
+        } else {
+            drawReflectedLine();
+            gc.fillText("Critical angle: " + format.format(getCriticalAngle()), 15, Light.CANVAS_HEIGHT + 30);
+        }
         gc.fillText("Index of refraction (mediums 1): " + ni, 15, Light.CANVAS_HEIGHT + 45);
         gc.fillText("Index of refraction (mediums 2): " + nr, 15, Light.CANVAS_HEIGHT + 60);
         
+    }
+    
+    /**
+     * @return The critical angle
+     */
+    private double getCriticalAngle() {
+            return Math.toDegrees(Math.asin(nr/ni));
     }
     
     /** 
