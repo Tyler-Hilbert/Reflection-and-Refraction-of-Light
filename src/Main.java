@@ -1,5 +1,3 @@
-package light;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -20,7 +18,7 @@ import javafx.stage.Stage;
  * Also has 2 views, input and light, within it. 
  * Acts as the controller for the program.
  */
-public class Light extends Application {
+public class Main extends Application {
     final static int CANVAS_HEIGHT = 800;
     final static int CANVAS_WIDTH = 800;
     
@@ -97,7 +95,7 @@ public class Light extends Application {
         
         // Draw medium and border
         gc.setFill(Color.BLUE);
-        gc.fillRect(CANVAS_WIDTH/2, 0, Light.CANVAS_WIDTH, Light.CANVAS_HEIGHT);
+        gc.fillRect(CANVAS_WIDTH/2, 0, Main.CANVAS_WIDTH, Main.CANVAS_HEIGHT);
         gc.setStroke(Color.BLACK);
         gc.strokeLine(0, CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT);
         

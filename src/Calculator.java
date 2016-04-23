@@ -1,5 +1,3 @@
-package light;
-
 import java.text.DecimalFormat;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -44,7 +42,7 @@ public class Calculator {
      * draws the normal line
      */
     private void drawNormalLine() {
-        for (int x=0; x<=Light.CANVAS_WIDTH; x+=50) {
+        for (int x=0; x<=Main.CANVAS_WIDTH; x+=50) {
             gc.strokeLine(x, getContactY(), x+25, getContactY());
         }
     }
@@ -64,7 +62,7 @@ public class Calculator {
         double refractionRadians = Math.toRadians(getAngleOfRefraction());
         double endingY = getMX() * Math.tan(refractionRadians) + getContactY();
         
-        gc.strokeLine(getMX(), getContactY(), Light.CANVAS_WIDTH, endingY);
+        gc.strokeLine(getMX(), getContactY(), Main.CANVAS_WIDTH, endingY);
     }
     
     /**
@@ -75,7 +73,7 @@ public class Calculator {
        gc.setStroke(Color.RED);
             
        // Creaete triangle and use pythagrom theroy to draw reflected line
-       double xr = Light.CANVAS_WIDTH; // Large number to make sure the reflected ray is long enough
+       double xr = Main.CANVAS_WIDTH; // Large number to make sure the reflected ray is long enough
        // The ray is always going to be reflected at an equal angle as the incidence ray
        double angleOfReflection = angleOfIncidence;
        double yr = Math.tan(Math.toRadians(angleOfReflection)) * xr;
@@ -93,18 +91,18 @@ public class Calculator {
     private void outputValues() {
         gc.setFill(Color.BLACK);
         
-        gc.fillText("Angle of incidence: " + angleOfIncidence, 15, Light.CANVAS_HEIGHT + 15);
+        gc.fillText("Angle of incidence: " + angleOfIncidence, 15, Main.CANVAS_HEIGHT + 15);
         
         // Display angle of refraction or critical angle
         DecimalFormat format = new DecimalFormat("###.###");
         if (!Double.isNaN(getAngleOfRefraction())) {
-            gc.fillText("Angle of refraction: " + format.format(getAngleOfRefraction()), 15, Light.CANVAS_HEIGHT + 30);
+            gc.fillText("Angle of refraction: " + format.format(getAngleOfRefraction()), 15, Main.CANVAS_HEIGHT + 30);
         } else {
             drawReflectedLine();
-            gc.fillText("Critical angle: " + format.format(getCriticalAngle()), 15, Light.CANVAS_HEIGHT + 30);
+            gc.fillText("Critical angle: " + format.format(getCriticalAngle()), 15, Main.CANVAS_HEIGHT + 30);
         }
-        gc.fillText("Index of refraction (mediums 1): " + ni, 15, Light.CANVAS_HEIGHT + 45);
-        gc.fillText("Index of refraction (mediums 2): " + nr, 15, Light.CANVAS_HEIGHT + 60);
+        gc.fillText("Index of refraction (mediums 1): " + ni, 15, Main.CANVAS_HEIGHT + 45);
+        gc.fillText("Index of refraction (mediums 2): " + nr, 15, Main.CANVAS_HEIGHT + 60);
         
     }
     
@@ -138,6 +136,6 @@ public class Calculator {
      * @return the middle of the x, where the lens center is
      */
     public int getMX() {
-        return Light.CANVAS_WIDTH / 2;
+        return Main.CANVAS_WIDTH / 2;
     }
 }
