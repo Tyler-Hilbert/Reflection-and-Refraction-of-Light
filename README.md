@@ -7,3 +7,4 @@ Enter variables
 Shows calculation
 ![Shows calculation](https://raw.githubusercontent.com/Tyler-Hilbert/Refraction-Of-Light/master/doc/Screenshot2.jpg "Shows calculation")  
 [Download build](https://github.com/Tyler-Hilbert/Refraction-Of-Light---Snells_Law/raw/master/dist/Refraction-Of-Light---Snells_Law.jar)
+(Need to have JDK8 installed to run)
