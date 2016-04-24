@@ -5,6 +5,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -63,9 +65,22 @@ public class Main extends Application {
                 final double inputNi = Double.parseDouble(n1Text.getText());
                 final double inputNr = Double.parseDouble(n2Text.getText());
                 final double inputAoi = Double.parseDouble(aoiText.getText());
-                showLight(primaryStage, inputNi, inputNr, inputAoi);
+                
+                // Validate the angle
+                if (inputAoi < 1 || inputAoi > 85) {
+                    Alert alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Invalid input");
+                    alert.setHeaderText("Please enter an angle between 1 and 85");
+                    alert.showAndWait();
+                } else {
+                    showLight(primaryStage, inputNi, inputNr, inputAoi);
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Invalid input");
+                alert.setHeaderText("Please enter a valid number in all text fields");
+                alert.showAndWait();
             }
         });
         
