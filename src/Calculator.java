@@ -12,8 +12,8 @@ public class Calculator {
     final private double angleOfIncidence; // The angle the light has going into the 2nd medium relative to the normal line.
     
     // X and Y points for light source
-    final private int sx = 100;
-    final private int sy = 100;
+    private int sx = 100;
+    private int sy = 100;
     
     private GraphicsContext gc; // The view
     
@@ -51,6 +51,19 @@ public class Calculator {
      * draws incidence line
      */
     private void drawIncidenceLine() {
+        // Update light source location on screen to prevent angles from going off the screen if there is a high angle off incidence
+        if (angleOfIncidence > 80) {
+            sx = 380;
+        }else if (angleOfIncidence > 70) {
+            sx = 300;
+        } else if (angleOfIncidence > 60) {
+            sx = 200;
+        } 
+        else {
+            sx = 100;
+        }
+        
+        // Draws line
         gc.strokeLine(sx, sy, getMX(), getContactY());
     }
     
