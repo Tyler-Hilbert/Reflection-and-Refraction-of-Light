@@ -108,14 +108,33 @@ public class Calculator {
         
         // Display angle of refraction or critical angle
         DecimalFormat format = new DecimalFormat("###.###");
-        if (!Double.isNaN(getAngleOfRefraction())) {
-            gc.fillText("Angle of refraction: " + format.format(getAngleOfRefraction()), 15, Main.CANVAS_HEIGHT + 30);
+        double angleOfRefraction = getAngleOfRefraction();
+        if (!Double.isNaN(angleOfRefraction)) {
+            gc.fillText("Angle of refraction: " + format.format(angleOfRefraction), 15, Main.CANVAS_HEIGHT + 30);
         } else {
             drawReflectedLine();
             gc.fillText("Critical angle: " + format.format(getCriticalAngle()), 15, Main.CANVAS_HEIGHT + 30);
         }
         gc.fillText("Index of refraction (mediums 1): " + ni, 15, Main.CANVAS_HEIGHT + 45);
         gc.fillText("Index of refraction (mediums 2): " + nr, 15, Main.CANVAS_HEIGHT + 60);
+        
+        
+        
+        // Test for Fresnel equations --------------------------------------------
+        // Get reflection coefficient
+        double aotRad = Math.toRadians(angleOfRefraction); // Angle of transmission in radians
+        double aoiRad = Math.toRadians(angleOfIncidence); // Angle of incidencce in radians
+        double rcp = Math.tan(aoiRad - aotRad) / Math.tan(aoiRad + aotRad); // Reflection coefficent for p-polarized
+        double rcs = -1 * Math.sin(aoiRad - aotRad) / Math.sin(aoiRad + aotRad); // Reflection coefficent for s-polarized
+        gc.fillText("Reflection coefficents: " + rcp + " & " + rcs, 15, Main.CANVAS_HEIGHT + 75);
+   
+        //Get transmission coefficient
+        double tcp = 2 * Math.sin(aotRad) * Math.cos(aoiRad) / (Math.sin(aoiRad + aotRad) * Math.cos(aoiRad - aotRad)); // Transmission coefficent for p-polarized
+        double tcs = 2 * Math.sin(aotRad) * Math.cos(aoiRad) / Math.sin(aoiRad + aotRad); // Transmission coefficent for s-polarized
+        gc.fillText("Transmission coefficents: " + tcp + " & " + tcs, 15, Main.CANVAS_HEIGHT + 100);
+        
+
+        
         
     }
     
