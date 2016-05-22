@@ -20,19 +20,18 @@ import javafx.stage.Stage;
  * Also has 2 views, input and light, within it. 
  * Acts as the controller for the program.
  */
-public class Main extends Application {
+public class View {
     final static int CANVAS_HEIGHT = 800;
     final static int CANVAS_WIDTH = 800;
     
-    @Override
-    public void start(Stage primaryStage) {
+    public View(Stage primaryStage, double ni, double nr, double aoi) {    
         primaryStage.setTitle("Light Refraction");
         
-        // Declares default values and creates input view
-        double ni = 1;
-        double nr = 1.5;
-        double aoi = 30;
         showInput(primaryStage, ni, nr, aoi);
+    }
+
+    View(Stage primaryStage, double ni) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     /**
@@ -68,7 +67,7 @@ public class Main extends Application {
                 
                 // Validate the angle
                 if (inputAoi < 1 || inputAoi > 85) {
-                    Alert alert = new Alert(AlertType.INFORMATION);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Invalid input");
                     alert.setHeaderText("Please enter an angle between 1 and 85");
                     alert.showAndWait();
@@ -77,7 +76,7 @@ public class Main extends Application {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                Alert alert = new Alert(AlertType.INFORMATION);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Invalid input");
                 alert.setHeaderText("Please enter a valid number in all text fields");
                 alert.showAndWait();
@@ -125,12 +124,5 @@ public class Main extends Application {
         root.getChildren().add(change);
         primaryStage.setScene(new Scene(root));   
         primaryStage.show();
-    }
-        
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
+}
 }
