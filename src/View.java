@@ -39,10 +39,6 @@ public class View {
      * Displays the view where users can input the variables of the program
      */
     private void showInput(Stage primaryStage) {
-        double ni = Controller.getNI();
-        double nr = Controller.getNR();
-        double aoi = Controller.getAOI();
-
         // Set up grid
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -59,9 +55,9 @@ public class View {
         Label n2Label = new Label("Index of refraction (medium 2): ");
         Label aoiLabel = new Label("Angle of incidence: ");
         
-        TextField n1Text = new TextField(Double.toString(ni));
-        TextField n2Text = new TextField(Double.toString(nr));
-        TextField aoiText = new TextField(Double.toString(aoi));
+        TextField n1Text = new TextField(Double.toString(Controller.getNI()));
+        TextField n2Text = new TextField(Double.toString(Controller.getNR()));
+        TextField aoiText = new TextField(Double.toString(Controller.getAOI()));
         
         Button submit = new Button("update");
         submit.setOnAction((ActionEvent e) -> {
@@ -109,7 +105,6 @@ public class View {
         
         Button change = new Button("Change properties");
         change.setOnAction((ActionEvent e) -> {
-            //Controller.updateModel(ni, nr, aoi);
             showInput(primaryStage);
         });
         
