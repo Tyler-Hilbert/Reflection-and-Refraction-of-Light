@@ -208,17 +208,7 @@ public class View {
         
         
         
-        // Test for Fresnel equations --------------------------------------------
-        // Get reflection coefficient
-        double aotRad = Math.toRadians(angleOfRefraction); // Angle of transmission in radians
-        double aoiRad = Math.toRadians(Controller.getAOI()); // Angle of incidencce in radians
-        double rcp = Math.tan(aoiRad - aotRad) / Math.tan(aoiRad + aotRad); // Reflection coefficent for p-polarized
-        double rcs = -1 * Math.sin(aoiRad - aotRad) / Math.sin(aoiRad + aotRad); // Reflection coefficent for s-polarized
         gc.fillText("Reflection coefficents: " + Controller.getPReflection() + " & " + Controller.getSReflection(), 15, CANVAS_HEIGHT + 75);
-   
-        //Get transmission coefficient
-        double tcp = 2 * Math.sin(aotRad) * Math.cos(aoiRad) / (Math.sin(aoiRad + aotRad) * Math.cos(aoiRad - aotRad)); // Transmission coefficent for p-polarized
-        double tcs = 2 * Math.sin(aotRad) * Math.cos(aoiRad) / Math.sin(aoiRad + aotRad); // Transmission coefficent for s-polarized
         gc.fillText("Transmission coefficents: " + Controller.getSTransmission() + " & " + Controller.getPTransmission(), 15, CANVAS_HEIGHT + 100);       
     }
     
@@ -251,7 +241,7 @@ public class View {
         }
     }
     
-        /**
+    /**
      * Draws the light going through the 2 mediums
      */
     public void drawLight() {
