@@ -54,4 +54,43 @@ public class Model {
         public double getCriticalAngle() {
             return Math.toDegrees(Math.asin(nr/ni));
         }
+        
+        
+        
+        
+        
+        
+        // Fresnels Equations
+        
+        public  double getPReflection() {
+            // Get reflection coefficient
+            double aotRad = Math.toRadians(getAngleOfRefraction()); // Angle of transmission in radians
+            double aoiRad = Math.toRadians(Controller.getAOI()); // Angle of incidencce in radians
+            double rcp = Math.tan(aoiRad - aotRad) / Math.tan(aoiRad + aotRad); // Reflection coefficent for p-polarized
+            return rcp;
+        }
+    
+        public double getSReflection() {
+            // Get reflection coefficient
+            double aotRad = Math.toRadians(getAngleOfRefraction()); // Angle of transmission in radians
+            double aoiRad = Math.toRadians(Controller.getAOI()); // Angle of incidencce in radians
+            double rcs = -1 * Math.sin(aoiRad - aotRad) / Math.sin(aoiRad + aotRad); // Reflection coefficent for s-polarized
+            return rcs;
+        }
+    
+        public double getPTransmission() {
+            //Get transmission coefficient
+            double aotRad = Math.toRadians(getAngleOfRefraction()); // Angle of transmission in radians
+            double aoiRad = Math.toRadians(Controller.getAOI()); // Angle of incidencce in radians
+            double tcp = 2 * Math.sin(aotRad) * Math.cos(aoiRad) / (Math.sin(aoiRad + aotRad) * Math.cos(aoiRad - aotRad)); // Transmission coefficent for p-polarized
+            return tcp;
+        }
+    
+        public double getSTransmission() {
+            //Get transmission coefficient
+            double aotRad = Math.toRadians(getAngleOfRefraction()); // Angle of transmission in radians
+            double aoiRad = Math.toRadians(Controller.getAOI()); // Angle of incidencce in radians
+            double tcs = 2 * Math.sin(aotRad) * Math.cos(aoiRad) / Math.sin(aoiRad + aotRad); // Transmission coefficent for s-polarized
+            return tcs;
+        }
 }
