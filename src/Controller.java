@@ -22,15 +22,26 @@ import javafx.stage.Stage;
  * Acts as the controller for the program.
  */
 public class Controller extends Application {
+    static Model model;
+    
+    
     @Override
     public void start(Stage primaryStage) {
         // Declares default values and creates input view
-        Model model = new Model();        
+        model = new Model();        
         // Declares default values and creates input view
         double ni = model.getNI();
         double nr = model.getNR();
         double aoi = model.getAOI();
         View view = new View(primaryStage, ni, nr, aoi);
+    
+    }
+    
+    public static String updateModel(double ni, double nr, double aoi) {
+        model.setNI(ni);
+        model.setNR(nr);
+        model.setAOI(aoi);
+        return Double.toString(ni);
     }
        
     /**

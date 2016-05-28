@@ -13,6 +13,7 @@ public class Model {
         double ni = 2;
         double nr = 1.5;
         double aoi = 30;
+                
         public double getNI() {
             return ni;
         }
@@ -23,5 +24,17 @@ public class Model {
         
         public double getAOI() {
             return aoi;
+        }
+        
+        public void setNI(double ni) {
+            this.ni = ni;
+        }
+ 
+        public void setNR(double nr) {
+            this.nr = nr;
+        }
+        
+        public void setAOI(double aoi) {
+            this.aoi = aoi;
         }
 }
