@@ -1,5 +1,4 @@
 import java.text.DecimalFormat;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -7,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -25,12 +23,12 @@ public class View {
     final static int CANVAS_HEIGHT = 800;
     final static int CANVAS_WIDTH = 800;
     
-        // X and Y points for light source
+    // X and Y points for light source
     private int sx = 100;
     private int sy = 100;
     
-   GraphicsContext gc;
-   double ni, nr, aoi;
+    GraphicsContext gc;
+    double ni, nr, aoi;
 
     
     public View(Stage primaryStage, double ni, double nr, double aoi) {    
@@ -103,11 +101,10 @@ public class View {
      * Displays the view where the light moves through the mediums
      */
     private void showLight(Stage primaryStage, double ni, double nr, double aoi) {
+        // Update values
         this.ni = ni;
         this.nr = nr;
-        this.aoi = aoi;
-        
-        
+        this.aoi = aoi;    
         
         // Set up view for the light
         //GraphicsContext gc;
@@ -118,7 +115,7 @@ public class View {
         Button change = new Button("Change properties");
         change.setOnAction((ActionEvent e) -> {
             showInput(primaryStage);
-            String msg = Controller.updateModel(ni, nr, aoi);
+            Controller.updateModel(ni, nr, aoi);
         });
         
         // Draw medium and border
@@ -130,7 +127,6 @@ public class View {
                 
         
         // Perform calculations and output to the view
-        //Calculator calc = new Calculator(ni, nr, aoi, gc);
         drawLight();
         gc.setStroke(Color.BLACK);
                 
@@ -231,11 +227,7 @@ public class View {
         //Get transmission coefficient
         double tcp = 2 * Math.sin(aotRad) * Math.cos(aoiRad) / (Math.sin(aoiRad + aotRad) * Math.cos(aoiRad - aotRad)); // Transmission coefficent for p-polarized
         double tcs = 2 * Math.sin(aotRad) * Math.cos(aoiRad) / Math.sin(aoiRad + aotRad); // Transmission coefficent for s-polarized
-        gc.fillText("Transmission coefficents: " + tcp + " & " + tcs, 15, CANVAS_HEIGHT + 100);
-        
-
-        
-        
+        gc.fillText("Transmission coefficents: " + tcp + " & " + tcs, 15, CANVAS_HEIGHT + 100);       
     }
     
     /**

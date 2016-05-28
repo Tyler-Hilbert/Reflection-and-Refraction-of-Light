@@ -10,9 +10,9 @@
  */
 public class Model {
         // Declares default values and creates input view
-        double ni = 2;
-        double nr = 1.5;
-        double aoi = 30;
+        double ni = 2; // Index of refaction for medium 1
+        double nr = 1.5; // Index of refraction for medium 2;
+        double aoi = 30; // Angle of incidence
                 
         public double getNI() {
             return ni;
