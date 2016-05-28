@@ -37,4 +37,21 @@ public class Model {
         public void setAOI(double aoi) {
             this.aoi = aoi;
         }
+        
+        /**
+            * @return The angle that the light will travel through the second medium relative to the normal line.
+        */
+        public double getAngleOfRefraction() {
+            double incidenceRadians = Math.toRadians(aoi);
+            double sin = ni * Math.sin(incidenceRadians) / nr;
+            double refractionRadians = Math.asin(sin);
+            return Math.toDegrees(refractionRadians);
+        }
+        
+        /**
+            * @return The critical angle
+        */
+        public double getCriticalAngle() {
+            return Math.toDegrees(Math.asin(nr/ni));
+        }
 }

@@ -28,21 +28,17 @@ public class View {
     private int sy = 100;
     
     GraphicsContext gc;
-    double ni, nr, aoi;
 
     
     public View(Stage primaryStage, double ni, double nr, double aoi) {    
         primaryStage.setTitle("Light Refraction");
-        this.ni = ni;
-        this.nr = nr;
-        this.aoi = aoi;
-        showInput(primaryStage);
+        showInput(primaryStage, ni, nr, aoi);
     }
     
     /**
      * Displays the view where users can input the variables of the program
      */
-    private void showInput(Stage primaryStage) {
+    private void showInput(Stage primaryStage, double ni, double nr, double aoi) {
         // Set up grid
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -100,12 +96,7 @@ public class View {
     /**
      * Displays the view where the light moves through the mediums
      */
-    private void showLight(Stage primaryStage, double ni, double nr, double aoi) {
-        // Update values
-        this.ni = ni;
-        this.nr = nr;
-        this.aoi = aoi;    
-        
+    private void showLight(Stage primaryStage, double ni, double nr, double aoi) {        
         // Set up view for the light
         //GraphicsContext gc;
         Group root = new Group();    
@@ -114,7 +105,7 @@ public class View {
         
         Button change = new Button("Change properties");
         change.setOnAction((ActionEvent e) -> {
-            showInput(primaryStage);
+            showInput(primaryStage, ni, nr, aoi);
             Controller.updateModel(ni, nr, aoi);
         });
         
@@ -147,6 +138,7 @@ public class View {
      * draws incidence line
      */
     private void drawIncidenceLine() {
+        double aoi = Controller.getAOI();
         // Update light source location on screen to prevent angles from going off the screen if there is a high angle off incidence
         if (aoi > 80) {
             sx = 380;
@@ -168,7 +160,7 @@ public class View {
      */
     private void drawRefractionLine() {
         // Find point along line going through medium
-        double refractionRadians = Math.toRadians(getAngleOfRefraction());
+        double refractionRadians = Math.toRadians(Controller.getAngleOfRefraction());
         double endingY = getMX() * Math.tan(refractionRadians) + getContactY();
         
         gc.strokeLine(getMX(), getContactY(), CANVAS_WIDTH, endingY);
@@ -184,7 +176,7 @@ public class View {
        // Creaete triangle and use pythagrom theroy to draw reflected line
        double xr = CANVAS_WIDTH; // Large number to make sure the reflected ray is long enough
        // The ray is always going to be reflected at an equal angle as the incidence ray
-       double angleOfReflection = aoi;
+       double angleOfReflection = Controller.getAOI();
        double yr = Math.tan(Math.toRadians(angleOfReflection)) * xr;
        
        // Move the triangle created to the create location
@@ -200,26 +192,26 @@ public class View {
     private void outputValues() {
         gc.setFill(Color.BLACK);
         
-        gc.fillText("Angle of incidence: " + aoi, 15, CANVAS_HEIGHT + 15);
+        gc.fillText("Angle of incidence: " + Controller.getAOI(), 15, CANVAS_HEIGHT + 15);
         
         // Display angle of refraction or critical angle
         DecimalFormat format = new DecimalFormat("###.###");
-        double angleOfRefraction = getAngleOfRefraction();
+        double angleOfRefraction = Controller.getAngleOfRefraction();
         if (!Double.isNaN(angleOfRefraction)) {
             gc.fillText("Angle of refraction: " + format.format(angleOfRefraction), 15, CANVAS_HEIGHT + 30);
         } else {
             drawReflectedLine();
-            gc.fillText("Critical angle: " + format.format(getCriticalAngle()), 15, CANVAS_HEIGHT + 30);
+            gc.fillText("Critical angle: " + format.format(Controller.getCriticalAngle()), 15, CANVAS_HEIGHT + 30);
         }
-        gc.fillText("Index of refraction (mediums 1): " + ni, 15, CANVAS_HEIGHT + 45);
-        gc.fillText("Index of refraction (mediums 2): " + nr, 15, CANVAS_HEIGHT + 60);
+        gc.fillText("Index of refraction (mediums 1): " + Controller.getNI(), 15, CANVAS_HEIGHT + 45);
+        gc.fillText("Index of refraction (mediums 2): " + Controller.getNR(), 15, CANVAS_HEIGHT + 60);
         
         
         
         // Test for Fresnel equations --------------------------------------------
         // Get reflection coefficient
         double aotRad = Math.toRadians(angleOfRefraction); // Angle of transmission in radians
-        double aoiRad = Math.toRadians(aoi); // Angle of incidencce in radians
+        double aoiRad = Math.toRadians(Controller.getAOI()); // Angle of incidencce in radians
         double rcp = Math.tan(aoiRad - aotRad) / Math.tan(aoiRad + aotRad); // Reflection coefficent for p-polarized
         double rcs = -1 * Math.sin(aoiRad - aotRad) / Math.sin(aoiRad + aotRad); // Reflection coefficent for s-polarized
         gc.fillText("Reflection coefficents: " + rcp + " & " + rcs, 15, CANVAS_HEIGHT + 75);
@@ -230,31 +222,17 @@ public class View {
         gc.fillText("Transmission coefficents: " + tcp + " & " + tcs, 15, CANVAS_HEIGHT + 100);       
     }
     
-    /**
-     * @return The critical angle
-     */
-    private double getCriticalAngle() {
-            return Math.toDegrees(Math.asin(nr/ni));
-    }
+
     
     /** 
      * @return The y value of where the light meets between the 2 mediums
      */
     private double getContactY() {
         double displacementX = getMX() - sx;
-        double incidenceRadians = Math.toRadians(aoi);
+        double incidenceRadians = Math.toRadians(Controller.getAOI());
         return Math.tan(incidenceRadians) * displacementX + sy;
     }
-    
-    /**
-     * @return The angle that the light will travel through the second medium relative to the normal line.
-     */
-    public double getAngleOfRefraction() {
-        double incidenceRadians = Math.toRadians(aoi);
-        double sin = ni * Math.sin(incidenceRadians) / nr;
-        double refractionRadians = Math.asin(sin);
-        return Math.toDegrees(refractionRadians);
-    }
+  
     
     /**
      * @return the middle of the x, where the lens center is

@@ -34,6 +34,26 @@ public class Controller extends Application {
         model.setNR(nr);
         model.setAOI(aoi);
     }
+    
+    public static double getNI() {
+        return model.getNI();
+    }
+       
+   public static double getNR() {
+        return model.getNR();
+    }
+        
+    public static double getAOI() {
+        return model.getAOI();
+    }
+
+    public static double getAngleOfRefraction() {
+        return model.getAngleOfRefraction();
+    }
+    
+    public static double getCriticalAngle() {
+        return model.getCriticalAngle();
+    }
        
     /**
      * @param args the command line arguments
