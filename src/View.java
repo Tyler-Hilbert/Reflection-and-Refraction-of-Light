@@ -73,7 +73,8 @@ public class View {
                     alert.setHeaderText("Please enter an angle between 1 and 85");
                     alert.showAndWait();
                 } else {
-                    showLight(primaryStage, inputNi, inputNr, inputAoi);
+                    Controller.updateModel(inputNi, inputNr, inputAoi); // Update Model
+                    showLight(primaryStage, inputNi, inputNr, inputAoi); // Update View
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -96,11 +97,8 @@ public class View {
     /**
      * Displays the view where the light moves through the mediums
      */
-    private void showLight(Stage primaryStage, double ni, double nr, double aoi) {     
-        Controller.updateModel(ni, nr, aoi);
-        
+    private void showLight(Stage primaryStage, double ni, double nr, double aoi) {    
         // Set up view for the light
-        //GraphicsContext gc;
         Group root = new Group();    
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT+100);
         gc = canvas.getGraphicsContext2D();
