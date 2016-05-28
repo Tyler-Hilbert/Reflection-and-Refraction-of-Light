@@ -16,11 +16,7 @@ public class Controller extends Application {
     public void start(Stage primaryStage) {
         // Declares default values and creates input view
         model = new Model();        
-        // Declares default values and creates input view
-        double ni = model.getNI();
-        double nr = model.getNR();
-        double aoi = model.getAOI();
-        new View(primaryStage, ni, nr, aoi);
+        new View(primaryStage);
     }
     
     /**

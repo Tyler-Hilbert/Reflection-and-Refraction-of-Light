@@ -30,15 +30,19 @@ public class View {
     GraphicsContext gc;
 
     
-    public View(Stage primaryStage, double ni, double nr, double aoi) {    
+    public View(Stage primaryStage) {    
         primaryStage.setTitle("Light Refraction");
-        showInput(primaryStage, ni, nr, aoi);
+        showInput(primaryStage);
     }
     
     /**
      * Displays the view where users can input the variables of the program
      */
-    private void showInput(Stage primaryStage, double ni, double nr, double aoi) {
+    private void showInput(Stage primaryStage) {
+        double ni = Controller.getNI();
+        double nr = Controller.getNR();
+        double aoi = Controller.getAOI();
+
         // Set up grid
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -74,7 +78,7 @@ public class View {
                     alert.showAndWait();
                 } else {
                     Controller.updateModel(inputNi, inputNr, inputAoi); // Update Model
-                    showLight(primaryStage, inputNi, inputNr, inputAoi); // Update View
+                    showLight(primaryStage); // Update View
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -97,7 +101,7 @@ public class View {
     /**
      * Displays the view where the light moves through the mediums
      */
-    private void showLight(Stage primaryStage, double ni, double nr, double aoi) {    
+    private void showLight(Stage primaryStage) {    
         // Set up view for the light
         Group root = new Group();    
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT+100);
@@ -105,8 +109,8 @@ public class View {
         
         Button change = new Button("Change properties");
         change.setOnAction((ActionEvent e) -> {
-            Controller.updateModel(ni, nr, aoi);
-            showInput(primaryStage, ni, nr, aoi);
+            //Controller.updateModel(ni, nr, aoi);
+            showInput(primaryStage);
         });
         
         // Draw medium and border
@@ -116,8 +120,6 @@ public class View {
         gc.strokeLine(0, CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT);
         
                 
-        
-        // Perform calculations and output to the view
         drawLight();
         gc.setStroke(Color.BLACK);
                 
@@ -172,11 +174,9 @@ public class View {
      */
     private void drawReflectedLine() {
        gc.setStroke(Color.RED);
-            
-       // Creaete triangle and use pythagrom theroy to draw reflected line
+ 
        double xr = CANVAS_WIDTH; // Large number to make sure the reflected ray is long enough
-       // The ray is always going to be reflected at an equal angle as the incidence ray
-       double angleOfReflection = Controller.getAOI();
+       double angleOfReflection = Controller.getAOI();       // The ray is always going to be reflected at an equal angle as the incidence ray
        double yr = Math.tan(Math.toRadians(angleOfReflection)) * xr;
        
        // Move the triangle created to the create location
@@ -206,10 +206,8 @@ public class View {
         gc.fillText("Index of refraction (mediums 1): " + Controller.getNI(), 15, CANVAS_HEIGHT + 45);
         gc.fillText("Index of refraction (mediums 2): " + Controller.getNR(), 15, CANVAS_HEIGHT + 60);
         
-        
-        
         gc.fillText("Reflection coefficents: " + Controller.getPReflection() + " & " + Controller.getSReflection(), 15, CANVAS_HEIGHT + 75);
-        gc.fillText("Transmission coefficents: " + Controller.getSTransmission() + " & " + Controller.getPTransmission(), 15, CANVAS_HEIGHT + 100);       
+        gc.fillText("Transmission coefficents: " + Controller.getSTransmission() + " & " + Controller.getPTransmission(), 15, CANVAS_HEIGHT + 90);       
     }
     
 
