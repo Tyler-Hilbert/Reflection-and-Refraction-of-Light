@@ -96,7 +96,9 @@ public class View {
     /**
      * Displays the view where the light moves through the mediums
      */
-    private void showLight(Stage primaryStage, double ni, double nr, double aoi) {        
+    private void showLight(Stage primaryStage, double ni, double nr, double aoi) {     
+        Controller.updateModel(ni, nr, aoi);
+        
         // Set up view for the light
         //GraphicsContext gc;
         Group root = new Group();    
@@ -105,8 +107,8 @@ public class View {
         
         Button change = new Button("Change properties");
         change.setOnAction((ActionEvent e) -> {
-            showInput(primaryStage, ni, nr, aoi);
             Controller.updateModel(ni, nr, aoi);
+            showInput(primaryStage, ni, nr, aoi);
         });
         
         // Draw medium and border
