@@ -1,0 +1,265 @@
+import java.text.DecimalFormat;
+import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+
+
+/**
+ * The main for the program.
+ * Also has 2 views, input and light, within it. 
+ * Acts as the controller for the program.
+ */
+public class View {
+    final static int CANVAS_HEIGHT = 800;
+    final static int CANVAS_WIDTH = 800;
+    
+    // X and Y points for light source
+    private int sx = 100;
+    private int sy = 100;
+    
+    GraphicsContext gc;
+
+    
+    public View(Stage primaryStage, double ni, double nr, double aoi) {    
+        primaryStage.setTitle("Light Refraction");
+        showInput(primaryStage, ni, nr, aoi);
+    }
+    
+    /**
+     * Displays the view where users can input the variables of the program
+     */
+    private void showInput(Stage primaryStage, double ni, double nr, double aoi) {
+        // Set up grid
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
+
+        Scene scene = new Scene(grid, 300, 275);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        
+        // Create and add gui components 
+        Label n1Label = new Label("Index of refracion (medium 1): ");
+        Label n2Label = new Label("Index of refraction (medium 2): ");
+        Label aoiLabel = new Label("Angle of incidence: ");
+        
+        TextField n1Text = new TextField(Double.toString(ni));
+        TextField n2Text = new TextField(Double.toString(nr));
+        TextField aoiText = new TextField(Double.toString(aoi));
+        
+        Button submit = new Button("update");
+        submit.setOnAction((ActionEvent e) -> {
+            try {
+                final double inputNi = Double.parseDouble(n1Text.getText());
+                final double inputNr = Double.parseDouble(n2Text.getText());
+                final double inputAoi = Double.parseDouble(aoiText.getText());
+                
+                // Validate the angle
+                if (inputAoi < 1 || inputAoi > 85) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Invalid input");
+                    alert.setHeaderText("Please enter an angle between 1 and 85");
+                    alert.showAndWait();
+                } else {
+                    showLight(primaryStage, inputNi, inputNr, inputAoi);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Invalid input");
+                alert.setHeaderText("Please enter a valid number in all text fields");
+                alert.showAndWait();
+            }
+        });
+        
+        grid.add(n1Label, 0, 0);
+        grid.add(n2Label, 0, 1);
+        grid.add(aoiLabel, 0, 2);
+        grid.add(n1Text, 1, 0);
+        grid.add(n2Text, 1, 1);
+        grid.add(aoiText, 1, 2);
+        grid.add(submit, 0, 3);
+    }
+    
+    /**
+     * Displays the view where the light moves through the mediums
+     */
+    private void showLight(Stage primaryStage, double ni, double nr, double aoi) {        
+        // Set up view for the light
+        //GraphicsContext gc;
+        Group root = new Group();    
+        Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT+100);
+        gc = canvas.getGraphicsContext2D();
+        
+        Button change = new Button("Change properties");
+        change.setOnAction((ActionEvent e) -> {
+            showInput(primaryStage, ni, nr, aoi);
+            Controller.updateModel(ni, nr, aoi);
+        });
+        
+        // Draw medium and border
+        gc.setFill(Color.BLUE);
+        gc.fillRect(CANVAS_WIDTH/2, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        gc.setStroke(Color.BLACK);
+        gc.strokeLine(0, CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT);
+        
+                
+        
+        // Perform calculations and output to the view
+        drawLight();
+        gc.setStroke(Color.BLACK);
+                
+        drawIncidenceLine();
+        drawRefractionLine();
+        drawNormalLine();
+        outputValues();
+        
+
+        root.getChildren().add(canvas);  
+        root.getChildren().add(change);
+        primaryStage.setScene(new Scene(root));   
+        primaryStage.show();
+}
+    
+    
+     /** 
+     * draws incidence line
+     */
+    private void drawIncidenceLine() {
+        double aoi = Controller.getAOI();
+        // Update light source location on screen to prevent angles from going off the screen if there is a high angle off incidence
+        if (aoi > 80) {
+            sx = 380;
+        }else if (aoi > 70) {
+            sx = 300;
+        } else if (aoi > 60) {
+            sx = 200;
+        } 
+        else {
+            sx = 100;
+        }
+        
+        // Draws line
+        gc.strokeLine(sx, sy, getMX(), getContactY());
+    }
+    
+    /**
+     * draws the refraction line
+     */
+    private void drawRefractionLine() {
+        // Find point along line going through medium
+        double refractionRadians = Math.toRadians(Controller.getAngleOfRefraction());
+        double endingY = getMX() * Math.tan(refractionRadians) + getContactY();
+        
+        gc.strokeLine(getMX(), getContactY(), CANVAS_WIDTH, endingY);
+    }
+    
+    /**
+     * Draws the reflected line.
+     * This only happens when the angle of incidence is over the critical angle.
+     */
+    private void drawReflectedLine() {
+       gc.setStroke(Color.RED);
+            
+       // Creaete triangle and use pythagrom theroy to draw reflected line
+       double xr = CANVAS_WIDTH; // Large number to make sure the reflected ray is long enough
+       // The ray is always going to be reflected at an equal angle as the incidence ray
+       double angleOfReflection = Controller.getAOI();
+       double yr = Math.tan(Math.toRadians(angleOfReflection)) * xr;
+       
+       // Move the triangle created to the create location
+       double xe = getMX() - xr;
+       double ye = getContactY() + yr;
+
+       gc.strokeLine(getMX(), getContactY(), xe, ye);
+    }
+    
+    /**
+     * Outputs the values to the view
+     */
+    private void outputValues() {
+        gc.setFill(Color.BLACK);
+        
+        gc.fillText("Angle of incidence: " + Controller.getAOI(), 15, CANVAS_HEIGHT + 15);
+        
+        // Display angle of refraction or critical angle
+        DecimalFormat format = new DecimalFormat("###.###");
+        double angleOfRefraction = Controller.getAngleOfRefraction();
+        if (!Double.isNaN(angleOfRefraction)) {
+            gc.fillText("Angle of refraction: " + format.format(angleOfRefraction), 15, CANVAS_HEIGHT + 30);
+        } else {
+            drawReflectedLine();
+            gc.fillText("Critical angle: " + format.format(Controller.getCriticalAngle()), 15, CANVAS_HEIGHT + 30);
+        }
+        gc.fillText("Index of refraction (mediums 1): " + Controller.getNI(), 15, CANVAS_HEIGHT + 45);
+        gc.fillText("Index of refraction (mediums 2): " + Controller.getNR(), 15, CANVAS_HEIGHT + 60);
+        
+        
+        
+        // Test for Fresnel equations --------------------------------------------
+        // Get reflection coefficient
+        double aotRad = Math.toRadians(angleOfRefraction); // Angle of transmission in radians
+        double aoiRad = Math.toRadians(Controller.getAOI()); // Angle of incidencce in radians
+        double rcp = Math.tan(aoiRad - aotRad) / Math.tan(aoiRad + aotRad); // Reflection coefficent for p-polarized
+        double rcs = -1 * Math.sin(aoiRad - aotRad) / Math.sin(aoiRad + aotRad); // Reflection coefficent for s-polarized
+        gc.fillText("Reflection coefficents: " + rcp + " & " + rcs, 15, CANVAS_HEIGHT + 75);
+   
+        //Get transmission coefficient
+        double tcp = 2 * Math.sin(aotRad) * Math.cos(aoiRad) / (Math.sin(aoiRad + aotRad) * Math.cos(aoiRad - aotRad)); // Transmission coefficent for p-polarized
+        double tcs = 2 * Math.sin(aotRad) * Math.cos(aoiRad) / Math.sin(aoiRad + aotRad); // Transmission coefficent for s-polarized
+        gc.fillText("Transmission coefficents: " + tcp + " & " + tcs, 15, CANVAS_HEIGHT + 100);       
+    }
+    
+
+    
+    /** 
+     * @return The y value of where the light meets between the 2 mediums
+     */
+    private double getContactY() {
+        double displacementX = getMX() - sx;
+        double incidenceRadians = Math.toRadians(Controller.getAOI());
+        return Math.tan(incidenceRadians) * displacementX + sy;
+    }
+  
+    
+    /**
+     * @return the middle of the x, where the lens center is
+     */
+    public int getMX() {
+        return CANVAS_WIDTH / 2;
+    }
+    
+        
+    /**
+     * draws the normal line
+     */
+    private void drawNormalLine() {
+        for (int x=0; x<=CANVAS_WIDTH; x+=50) {
+            gc.strokeLine(x, getContactY(), x+25, getContactY());
+        }
+    }
+    
+        /**
+     * Draws the light going through the 2 mediums
+     */
+    public void drawLight() {
+        gc.setStroke(Color.BLACK);
+                
+        drawIncidenceLine();
+        drawRefractionLine();
+        drawNormalLine();
+        outputValues();
+    }
+}
