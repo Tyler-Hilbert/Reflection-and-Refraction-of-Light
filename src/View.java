@@ -201,8 +201,8 @@ public class View {
         gc.fillText("Index of refraction (mediums 1): " + Controller.getNI(), 15, CANVAS_HEIGHT + 45);
         gc.fillText("Index of refraction (mediums 2): " + Controller.getNR(), 15, CANVAS_HEIGHT + 60);
         
-        gc.fillText("Reflection coefficents: " + Controller.getPReflection() + " & " + Controller.getSReflection(), 15, CANVAS_HEIGHT + 75);
-        gc.fillText("Transmission coefficents: " + Controller.getSTransmission() + " & " + Controller.getPTransmission(), 15, CANVAS_HEIGHT + 90);       
+        gc.fillText("Reflection coefficent for P polarization: " + Controller.getPReflection() + " & S polarization " + Controller.getSReflection(), 15, CANVAS_HEIGHT + 75);
+        gc.fillText("Transmission coefficents for P polarizatoin: " + Controller.getPTransmission() + " & S polarization" + Controller.getSTransmission(), 15, CANVAS_HEIGHT + 90);       
     }
     
 
