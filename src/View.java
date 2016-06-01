@@ -195,7 +195,7 @@ public class View {
         gc.fillText("Angle of incidence: " + Controller.getAOI(), 15, CANVAS_HEIGHT + 15);
         
         // Display angle of refraction or critical angle
-        DecimalFormat format = new DecimalFormat("###.###");
+        DecimalFormat format = new DecimalFormat("#.####");
         double angleOfRefraction = Controller.getAngleOfRefraction();
         if (!Double.isNaN(angleOfRefraction)) {
             gc.fillText("Angle of refraction: " + format.format(angleOfRefraction), 15, CANVAS_HEIGHT + 30);
@@ -203,15 +203,18 @@ public class View {
             drawReflectedLine();
             gc.fillText("Critical angle: " + format.format(Controller.getCriticalAngle()), 15, CANVAS_HEIGHT + 30);
         }
-        gc.fillText("Index of refraction (mediums 1): " + Controller.getNI(), 15, CANVAS_HEIGHT + 45);
-        gc.fillText("Index of refraction (mediums 2): " + Controller.getNR(), 15, CANVAS_HEIGHT + 60);
+        gc.fillText("Index of refraction (mediums 1): " + format.format(Controller.getNI()), 15, CANVAS_HEIGHT + 45);
+        gc.fillText("Index of refraction (mediums 2): " + format.format(Controller.getNR()), 15, CANVAS_HEIGHT + 60);
         
-        gc.fillText("Reflection coefficent for P polarization: " + Controller.getPReflectionCoefficient() + " & S polarization " + Controller.getSReflectionCoefficient(), 15, CANVAS_HEIGHT + 75);
-        gc.fillText("Transmission coefficents for P polarizatoin: " + Controller.getPTransmissionCoefficient() + " & S polarization" + Controller.getSTransmissionCoefficient(), 15, CANVAS_HEIGHT + 90);       
+        gc.fillText("Reflection coefficent for P polarization: " + format.format(Controller.getPReflectionCoefficient()) 
+                + " & S polarization " + format.format(Controller.getSReflectionCoefficient()), 15, CANVAS_HEIGHT + 75);
+        gc.fillText("Transmission coefficents for P polarizatoin: " + format.format(Controller.getPTransmissionCoefficient()) 
+                + " & S polarization" + format.format(Controller.getSTransmissionCoefficient()), 15, CANVAS_HEIGHT + 90);       
         
         
         //  THESE CALCULATIONS AREN'T CORRECT AND NEED TO BE DEBUGED------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        gc.fillText("Percents: " + Controller.getPReflectionPercent() + " : " + Controller.getSReflectionPercent() + " : " + Controller.getPTransmissionPercent() + " : " + Controller.getSTransmissionPercent(), 15, CANVAS_HEIGHT + 105);
+        gc.fillText("Percents: " + format.format(Controller.getPReflectionPercent()) + "% : " + format.format(Controller.getSReflectionPercent())
+                + "% : " + format.format(Controller.getPTransmissionPercent()) + "% : " + format.format(Controller.getSTransmissionPercent()) + "%", 15, CANVAS_HEIGHT + 105);
     }
     
 
