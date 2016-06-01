@@ -93,35 +93,19 @@ public class Model {
             return tcs;
         }
         
-       public double getPReflectionPercent() {
-           if (ni <= nr) {
-               return Math.pow(getPReflectionCoefficient(), 2);
-           } else {
-               return 0; // TODO: Fix
-           }
+        public double getPReflectionPercent() {
+            return 100 * Math.pow(getPReflectionCoefficient(), 2);
        }
        
-       public double getSReflectionPercent() {
-            if (ni <= nr) {
-                return Math.pow(getSReflectionCoefficient(), 2);
-            } else {
-                return 0; // TODO: Fix
-            }
-       }
+        public double getSReflectionPercent() {
+            return 100 * Math.pow(getSReflectionCoefficient(), 2);
+        }
        
-       public double getPTransmissionPercent() {
-            if (ni <= nr) {
-                return Math.pow(getPTransmissionCoefficient(), 2);
-            } else {
-                return 0; // TODO: Fix
-            }
-       }
+        public double getPTransmissionPercent() {
+            return 100 - getPReflectionPercent();
+        }
        
-       public double getSTransmissionPercent() {
-            if (ni <= nr) {
-                return Math.pow(getSTransmissionCoefficient(), 2);
-            } else {
-                return 0; // TODO: Fix
-            }
-       }
+        public double getSTransmissionPercent() {
+           return 100 - getSReflectionPercent();
+        }
 }
