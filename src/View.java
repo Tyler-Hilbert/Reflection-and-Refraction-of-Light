@@ -31,7 +31,12 @@ public class View {
 
     
     public View(Stage primaryStage) {    
+        // Setup windows details
         primaryStage.setTitle("Light Refraction");
+        primaryStage.setX(0);
+        primaryStage.setY(0);
+        
+        // Draw data onto window
         showInput(primaryStage);
     }
     
@@ -100,7 +105,7 @@ public class View {
     private void showLight(Stage primaryStage) {    
         // Set up view for the light
         Group root = new Group();    
-        Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT+100);
+        Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT+125);
         gc = canvas.getGraphicsContext2D();
         
         Button change = new Button("Change properties");
@@ -201,8 +206,12 @@ public class View {
         gc.fillText("Index of refraction (mediums 1): " + Controller.getNI(), 15, CANVAS_HEIGHT + 45);
         gc.fillText("Index of refraction (mediums 2): " + Controller.getNR(), 15, CANVAS_HEIGHT + 60);
         
-        gc.fillText("Reflection coefficent for P polarization: " + Controller.getPReflection() + " & S polarization " + Controller.getSReflection(), 15, CANVAS_HEIGHT + 75);
-        gc.fillText("Transmission coefficents for P polarizatoin: " + Controller.getPTransmission() + " & S polarization" + Controller.getSTransmission(), 15, CANVAS_HEIGHT + 90);       
+        gc.fillText("Reflection coefficent for P polarization: " + Controller.getPReflectionCoefficient() + " & S polarization " + Controller.getSReflectionCoefficient(), 15, CANVAS_HEIGHT + 75);
+        gc.fillText("Transmission coefficents for P polarizatoin: " + Controller.getPTransmissionCoefficient() + " & S polarization" + Controller.getSTransmissionCoefficient(), 15, CANVAS_HEIGHT + 90);       
+        
+        
+        //  THESE CALCULATIONS AREN'T CORRECT AND NEED TO BE DEBUGED------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        gc.fillText("Percents: " + Controller.getPReflectionPercent() + " : " + Controller.getSReflectionPercent() + " : " + Controller.getPTransmissionPercent() + " : " + Controller.getSTransmissionPercent(), 15, CANVAS_HEIGHT + 105);
     }
     
 

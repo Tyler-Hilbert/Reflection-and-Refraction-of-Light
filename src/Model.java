@@ -61,8 +61,7 @@ public class Model {
         
         
         // Fresnels Equations
-        
-        public  double getPReflection() {
+        public  double getPReflectionCoefficient() {
             // Get reflection coefficient
             double aotRad = Math.toRadians(getAngleOfRefraction()); // Angle of transmission in radians
             double aoiRad = Math.toRadians(Controller.getAOI()); // Angle of incidencce in radians
@@ -70,7 +69,7 @@ public class Model {
             return rcp;
         }
     
-        public double getSReflection() {
+        public double getSReflectionCoefficient() {
             // Get reflection coefficient
             double aotRad = Math.toRadians(getAngleOfRefraction()); // Angle of transmission in radians
             double aoiRad = Math.toRadians(Controller.getAOI()); // Angle of incidencce in radians
@@ -78,7 +77,7 @@ public class Model {
             return rcs;
         }
     
-        public double getPTransmission() {
+        public double getPTransmissionCoefficient() {
             //Get transmission coefficient
             double aotRad = Math.toRadians(getAngleOfRefraction()); // Angle of transmission in radians
             double aoiRad = Math.toRadians(Controller.getAOI()); // Angle of incidencce in radians
@@ -86,11 +85,43 @@ public class Model {
             return tcp;
         }
     
-        public double getSTransmission() {
+        public double getSTransmissionCoefficient() {
             //Get transmission coefficient
             double aotRad = Math.toRadians(getAngleOfRefraction()); // Angle of transmission in radians
             double aoiRad = Math.toRadians(Controller.getAOI()); // Angle of incidencce in radians
             double tcs = 2 * Math.sin(aotRad) * Math.cos(aoiRad) / Math.sin(aoiRad + aotRad); // Transmission coefficent for s-polarized
             return tcs;
         }
+        
+       public double getPReflectionPercent() {
+           if (ni <= nr) {
+               return Math.pow(getPReflectionCoefficient(), 2);
+           } else {
+               return 0; // TODO: Fix
+           }
+       }
+       
+       public double getSReflectionPercent() {
+            if (ni <= nr) {
+                return Math.pow(getSReflectionCoefficient(), 2);
+            } else {
+                return 0; // TODO: Fix
+            }
+       }
+       
+       public double getPTransmissionPercent() {
+            if (ni <= nr) {
+                return Math.pow(getPTransmissionCoefficient(), 2);
+            } else {
+                return 0; // TODO: Fix
+            }
+       }
+       
+       public double getSTransmissionPercent() {
+            if (ni <= nr) {
+                return Math.pow(getSTransmissionCoefficient(), 2);
+            } else {
+                return 0; // TODO: Fix
+            }
+       }
 }

@@ -51,21 +51,37 @@ public class Controller extends Application {
         return model.getCriticalAngle();
     }
     
-    public static double getPReflection() {
-        return model.getPReflection();
+    public static double getPReflectionCoefficient() {
+        return model.getPReflectionCoefficient();
     }
     
-    public static double getSReflection() {
-        return model.getSReflection();
+    public static double getSReflectionCoefficient() {
+        return model.getSReflectionCoefficient();
     }
     
-    public static double getPTransmission() {
-        return model.getPTransmission();
+    public static double getPTransmissionCoefficient() {
+        return model.getPTransmissionCoefficient();
     }
     
-    public static double getSTransmission() {
-        return model.getSTransmission();
+    public static double getSTransmissionCoefficient() {
+        return model.getSTransmissionCoefficient();
     }
+    
+    public static double getPReflectionPercent() {
+        return model.getPReflectionPercent();
+    }
+
+   public static double getSReflectionPercent() {
+       return model.getSReflectionPercent();
+   }
+
+   public static double getPTransmissionPercent() {
+       return model.getPTransmissionPercent();
+   }
+
+   public static double getSTransmissionPercent() {
+       return model.getSTransmissionPercent();
+   }
        
     /**
      * @param args the command line arguments
