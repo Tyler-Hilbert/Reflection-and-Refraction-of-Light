@@ -14,33 +14,58 @@ public class Model {
         double nr = 1.5; // Index of refraction for medium 2;
         double aoi = 30; // Angle of incidence
                 
+        /**
+         * 
+         * @return Index of refraction for medium 1
+         */
         public double getNI() {
             return ni;
         }
        
+        /**
+         * 
+         * @return Index of refraction for medium 2
+         */
         public double getNR() {
             return nr;
         }
         
+        /**
+         * 
+         * @return Angle Of Incidence
+         */
         public double getAOI() {
             return aoi;
         }
-        
+
+        /**
+         * 
+         * @param ni Index of refraction for medium 1
+         */
         public void setNI(double ni) {
             this.ni = ni;
         }
- 
+        
+        /**
+         * 
+         * @param nr Index of refraction for medium 2
+         */ 
         public void setNR(double nr) {
             this.nr = nr;
         }
         
+        /**
+         * 
+         * @param aoi Angle Of Incidence
+         */
         public void setAOI(double aoi) {
             this.aoi = aoi;
         }
         
         /**
-            * @return The angle that the light will travel through the second medium relative to the normal line.
-        */
+         * 
+   `     * @return The angle that the light will travel through the second medium relative to the normal line.
+         */
         public double getAngleOfRefraction() {
             double incidenceRadians = Math.toRadians(aoi);
             double sin = ni * Math.sin(incidenceRadians) / nr;
@@ -49,16 +74,12 @@ public class Model {
         }
         
         /**
-            * @return The critical angle
-        */
+         * 
+         * @return The critical angle
+         */
         public double getCriticalAngle() {
             return Math.toDegrees(Math.asin(nr/ni));
         }
-        
-        
-        
-        
-        
         
         // Fresnels Equations
         public  double getPReflectionCoefficient() {
