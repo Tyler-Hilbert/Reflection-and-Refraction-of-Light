@@ -223,7 +223,7 @@ public class View {
      * @return The y value of where the light meets between the 2 mediums
      */
     private double getContactY() {
-        double displacementX = getMX() - sx;
+        double displacementX = getMX() - sx; // The x distance the light will travel to hit the middle x location
         double incidenceRadians = Math.toRadians(Controller.getAOI());
         return Math.tan(incidenceRadians) * displacementX + sy;
     }
