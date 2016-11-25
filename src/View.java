@@ -16,30 +16,30 @@ import javafx.stage.Stage;
 
 /**
  * The main for the program.
- * Also has 2 views, input and light, within it. 
+ * Also has 2 views, input and light, within it.
  * Acts as the controller for the program.
  */
 public class View {
     final static int CANVAS_HEIGHT = 800;
     final static int CANVAS_WIDTH = 800;
-    
+
     // X and Y points for light source
     private int sx = 100;
     private int sy = 100;
-    
+
     GraphicsContext gc;
 
-    
-    public View(Stage primaryStage) {    
+
+    public View(Stage primaryStage) {
         // Setup windows details
         primaryStage.setTitle("Light Refraction");
         primaryStage.setX(0);
         primaryStage.setY(0);
-        
+
         // Draw data onto window
         showInput(primaryStage);
     }
-    
+
     /**
      * Displays the view where users can input the variables of the program
      */
@@ -54,23 +54,23 @@ public class View {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        
-        // Create and add gui components 
+
+        // Create and add gui components
         Label n1Label = new Label("Index of refracion (medium 1): ");
         Label n2Label = new Label("Index of refraction (medium 2): ");
         Label aoiLabel = new Label("Angle of incidence: ");
-        
+
         TextField n1Text = new TextField(Double.toString(Controller.getNI()));
         TextField n2Text = new TextField(Double.toString(Controller.getNR()));
         TextField aoiText = new TextField(Double.toString(Controller.getAOI()));
-        
+
         Button submit = new Button("update");
         submit.setOnAction((ActionEvent e) -> {
             try {
                 final double inputNi = Double.parseDouble(n1Text.getText());
                 final double inputNr = Double.parseDouble(n2Text.getText());
                 final double inputAoi = Double.parseDouble(aoiText.getText());
-                
+
                 // Validate the angle
                 if (inputAoi < 1 || inputAoi > 85) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -89,7 +89,7 @@ public class View {
                 alert.showAndWait();
             }
         });
-        
+
         grid.add(n1Label, 0, 0);
         grid.add(n2Label, 0, 1);
         grid.add(aoiLabel, 0, 2);
@@ -98,45 +98,39 @@ public class View {
         grid.add(aoiText, 1, 2);
         grid.add(submit, 0, 3);
     }
-    
+
     /**
      * Displays the view where the light moves through the mediums
      */
-    private void showLight(Stage primaryStage) {    
+    private void showLight(Stage primaryStage) {
         // Set up view for the light
-        Group root = new Group();    
+        Group root = new Group();
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT+125);
         gc = canvas.getGraphicsContext2D();
-        
+
         Button change = new Button("Change properties");
         change.setOnAction((ActionEvent e) -> {
             showInput(primaryStage);
         });
-        
+
         // Draw medium and border
         gc.setFill(Color.BLUE);
         gc.fillRect(CANVAS_WIDTH/2, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         gc.setStroke(Color.BLACK);
         gc.strokeLine(0, CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT);
-        
-                
+
+
         drawLight();
-        gc.setStroke(Color.BLACK);
-                
-        drawIncidenceLine();
-        drawRefractionLine();
-        drawNormalLine();
-        outputValues();
         
 
-        root.getChildren().add(canvas);  
+        root.getChildren().add(canvas);
         root.getChildren().add(change);
-        primaryStage.setScene(new Scene(root));   
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
 }
-    
-    
-     /** 
+
+
+     /**
      * draws incidence line
      */
     private void drawIncidenceLine() {
@@ -148,15 +142,15 @@ public class View {
             sx = 300;
         } else if (aoi > 60) {
             sx = 200;
-        } 
+        }
         else {
             sx = 100;
         }
-        
+
         // Draws line
         gc.strokeLine(sx, sy, getMX(), getContactY());
     }
-    
+
     /**
      * draws the refraction line
      */
@@ -164,36 +158,36 @@ public class View {
         // Find point along line going through medium
         double refractionRadians = Math.toRadians(Controller.getAngleOfRefraction());
         double endingY = getMX() * Math.tan(refractionRadians) + getContactY();
-        
+
         gc.strokeLine(getMX(), getContactY(), CANVAS_WIDTH, endingY);
     }
-    
+
     /**
      * Draws the reflected line.
      * This only happens when the angle of incidence is over the critical angle.
      */
     private void drawReflectedLine() {
        gc.setStroke(Color.RED);
- 
+
        double xr = CANVAS_WIDTH; // Large number to make sure the reflected ray is long enough
        double angleOfReflection = Controller.getAOI();       // The ray is always going to be reflected at an equal angle as the incidence ray
        double yr = Math.tan(Math.toRadians(angleOfReflection)) * xr;
-       
+
        // Move the triangle created to the create location
        double xe = getMX() - xr;
        double ye = getContactY() + yr;
 
        gc.strokeLine(getMX(), getContactY(), xe, ye);
     }
-    
+
     /**
      * Outputs the values to the view
      */
     private void outputValues() {
         gc.setFill(Color.BLACK);
-        
+
         gc.fillText("Angle of incidence: " + Controller.getAOI(), 15, CANVAS_HEIGHT + 15);
-        
+
         // Display angle of refraction or critical angle
         DecimalFormat format = new DecimalFormat("#.####");
         double angleOfRefraction = Controller.getAngleOfRefraction();
@@ -205,21 +199,21 @@ public class View {
         }
         gc.fillText("Index of refraction (mediums 1): " + format.format(Controller.getNI()), 15, CANVAS_HEIGHT + 45);
         gc.fillText("Index of refraction (mediums 2): " + format.format(Controller.getNR()), 15, CANVAS_HEIGHT + 60);
-        
-        gc.fillText("Reflection coefficent for P polarization: " + format.format(Controller.getPReflectionCoefficient()) 
+
+        gc.fillText("Reflection coefficent for P polarization: " + format.format(Controller.getPReflectionCoefficient())
                 + " & S polarization " + format.format(Controller.getSReflectionCoefficient()), 15, CANVAS_HEIGHT + 75);
-        gc.fillText("Transmission coefficents for P polarizatoin: " + format.format(Controller.getPTransmissionCoefficient()) 
-                + " & S polarization" + format.format(Controller.getSTransmissionCoefficient()), 15, CANVAS_HEIGHT + 90);       
-        
-        
+        gc.fillText("Transmission coefficents for P polarizatoin: " + format.format(Controller.getPTransmissionCoefficient())
+                + " & S polarization" + format.format(Controller.getSTransmissionCoefficient()), 15, CANVAS_HEIGHT + 90);
+
+
         //  THESE CALCULATIONS AREN'T CORRECT AND NEED TO BE DEBUGED------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         gc.fillText("Percents: " + format.format(Controller.getPReflectionPercent()) + "% : " + format.format(Controller.getSReflectionPercent())
                 + "% : " + format.format(Controller.getPTransmissionPercent()) + "% : " + format.format(Controller.getSTransmissionPercent()) + "%", 15, CANVAS_HEIGHT + 105);
     }
-    
 
-    
-    /** 
+
+
+    /**
      * @return The y value of where the light meets between the 2 mediums
      */
     private double getContactY() {
@@ -227,16 +221,16 @@ public class View {
         double incidenceRadians = Math.toRadians(Controller.getAOI());
         return Math.tan(incidenceRadians) * displacementX + sy;
     }
-  
-    
+
+
     /**
      * @return the middle of the x, where the lens center is
      */
     public int getMX() {
         return CANVAS_WIDTH / 2;
     }
-    
-        
+
+
     /**
      * draws the normal line
      */
@@ -245,13 +239,13 @@ public class View {
             gc.strokeLine(x, getContactY(), x+25, getContactY());
         }
     }
-    
+
     /**
      * Draws the light going through the 2 mediums
      */
     public void drawLight() {
         gc.setStroke(Color.BLACK);
-                
+
         drawIncidenceLine();
         drawRefractionLine();
         drawNormalLine();
