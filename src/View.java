@@ -134,6 +134,8 @@ public class View {
      * draws incidence line
      */
     private void drawIncidenceLine() {
+        gc.setStroke(Color.BLACK);
+        
         double aoi = Controller.getAOI();
         // Update light source location on screen to prevent angles from going off the screen if there is a high angle off incidence
         if (aoi > 80) {
@@ -148,6 +150,7 @@ public class View {
         }
 
         // Draws line
+        System.out.println("Incidence Line-sx:"+sx+"sy:"+sy+"mx:"+getMX()+"contacty:"+getContactY());
         gc.strokeLine(sx, sy, getMX(), getContactY());
     }
 
@@ -155,10 +158,13 @@ public class View {
      * draws the refraction line
      */
     private void drawRefractionLine() {
+        gc.setStroke(Color.BLACK);
+        
         // Find point along line going through medium
         double refractionRadians = Math.toRadians(Controller.getAngleOfRefraction());
         double endingY = getMX() * Math.tan(refractionRadians) + getContactY();
 
+        System.out.println("Refcation Line-mx:"+getMX()+"getContactY():"+getContactY()+"CANVAS_WIDTH:"+CANVAS_WIDTH+"endingY:"+endingY);
         gc.strokeLine(getMX(), getContactY(), CANVAS_WIDTH, endingY);
     }
 
@@ -177,6 +183,7 @@ public class View {
        double xe = getMX() - xr;
        double ye = getContactY() + yr;
 
+       System.out.println("Reflected Line-mx:"+getMX()+"getContactY():"+getContactY()+"xe:"+xe+"ye:"+ye);
        gc.strokeLine(getMX(), getContactY(), xe, ye);
     }
 
@@ -194,7 +201,6 @@ public class View {
         if (!Double.isNaN(angleOfRefraction)) {
             gc.fillText("Angle of refraction: " + format.format(angleOfRefraction), 15, CANVAS_HEIGHT + 30);
         } else {
-            drawReflectedLine();
             gc.fillText("Critical angle: " + format.format(Controller.getCriticalAngle()), 15, CANVAS_HEIGHT + 30);
         }
         gc.fillText("Index of refraction (mediums 1): " + format.format(Controller.getNI()), 15, CANVAS_HEIGHT + 45);
@@ -235,6 +241,8 @@ public class View {
      * draws the normal line
      */
     private void drawNormalLine() {
+        gc.setStroke(Color.BLACK);
+        
         for (int x=0; x<=CANVAS_WIDTH; x+=50) {
             gc.strokeLine(x, getContactY(), x+25, getContactY());
         }
@@ -244,10 +252,13 @@ public class View {
      * Draws the light going through the 2 mediums
      */
     public void drawLight() {
-        gc.setStroke(Color.BLACK);
-
         drawIncidenceLine();
-        drawRefractionLine();
+        // TODO draw both of these lines when  possible
+        if (Double.isNaN(Controller.getAngleOfRefraction())) {
+            drawReflectedLine();   
+        } else {
+            drawRefractionLine();
+        }
         drawNormalLine();
         outputValues();
     }
